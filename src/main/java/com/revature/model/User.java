@@ -1,67 +1,103 @@
 package com.revature.model;
 
-import java.util.HashSet;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revature.enums.Role;
+
+import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.persistence.JoinColumn;
-import org.hibernate.validator.constraints.Length;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
-@Data // generate getters/setter, toString, hashCode, and equals methods automatically
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Id
-	@Column(name = "user_id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int ID;
+    @Column(name = "first_name")
+    private String firstName;
 
-	@NotBlank
-	@Length(min = 5)
-	@Pattern(regexp = "[a-zA-Z][a-zA-Z0-9]*")
-	private String username;
+    @Column(name = "last_name")
+    private String lastName;
 
-	@NotBlank
-	private String password;
+    @Column(name = "email")
+    private String email;
 
-	@Email
-	private String email;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "order_flow", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "user_id") }, inverseJoinColumns = {
-					@JoinColumn(name = "order_id", referencedColumnName = "order_id") })
-	private Set<Order> userOrdersList = new HashSet<>();
+    @Column(name = "password")
+    private String password;
 
-	// private List cart; //not sure what we are calling this part yet and not in
-	// the erd
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            fetch = FetchType.LAZY)
+    private List<Order> orders;
 
-	public User(@NotBlank @Length(min = 5) @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9]*") String username,
-			@NotBlank String password, @Email String email) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.email = email;
-	}
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public User(String firstName, String lastName, String email, Role role, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+        this.password = password;
+    }
+
+    public User() {
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 }

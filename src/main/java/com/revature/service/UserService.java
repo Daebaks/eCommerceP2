@@ -44,8 +44,8 @@ private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	public User add(User u) {
 		User returnedUser = userRepo.save(u);
-		if (returnedUser.getID() >0) {
-			log.info("Successfully returned user with id {}", returnedUser.getID());
+		if (returnedUser.getId() >0) {
+			log.info("Successfully returned user with id {}", returnedUser.getId());
 		} else {
 			log.warn("Could not add user");
 		}

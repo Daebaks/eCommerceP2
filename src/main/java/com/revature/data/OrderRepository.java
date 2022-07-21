@@ -1,13 +1,14 @@
 package com.revature.data;
-import java.util.List;
-import java.util.Optional;
 
+import com.revature.model.Order;
+import com.revature.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class OrderRepository {
+import java.util.List;
 
-	
+@Repository
+public interface OrderRepository  extends JpaRepository<Order, Integer> {
+    List<Order> findAllByUserOrderByCreatedDateDesc(User user);
+
 }
